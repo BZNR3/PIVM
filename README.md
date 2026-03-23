@@ -22,10 +22,11 @@ Key features:
 ## Requirements
 
 ```bash
-pip install torch torchvision albumentations numpy opencv-python einops tqdm Pillow
+conda env create -f environment.yml
+conda activate pivm
 ```
 
-Tested with Python 3.8+, PyTorch 2.0+, CUDA 11.8+.
+Tested with Python 3.9, PyTorch 1.12.1, CUDA 11.3.
 
 ---
 
