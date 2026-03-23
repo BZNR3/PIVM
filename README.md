@@ -54,7 +54,7 @@ All preprocessing scripts are located in [`preprocessing/`](preprocessing/). Run
 
 ### Step 1 — Merge organ segmentations into a single mask
 
-[`preprocessing/ts_process.py`](preprocessing/ts_process.py) combines individual per-organ NIfTI files into a single multi-label `mask.nii` per subject. The 14 abdominal organs (liver, spleen, kidneys, pancreas, stomach, lungs, gallbladder, adrenal glands) are each assigned a unique integer label (1–14).
+[`preprocessing/ts_process.py`](preprocessing/ts_process.py) combines individual per-organ NIfTI files into a single multi-label `mask.nii` per subject. 
 
 ```bash
 python preprocessing/ts_process.py
@@ -66,11 +66,6 @@ python preprocessing/ts_process.py
 ```bash
 python preprocessing/vol2imglabel.py
 ```
-
-> Edit `dataset_dir` inside the script to point to your dataset. Ensure `./image/` and `./label/` directories exist beforehand.
-
-Output: `{subject}_{slice}.png` files in `./image/` and `./label/`.
-
 ### Step 3 — Generate intensity-based conditioning labels
 
 [`preprocessing/process_ct_intensity.py`](preprocessing/process_ct_intensity.py) replaces each organ region in the mask with its **global mean CT intensity** across the full dataset, producing the conditioning label maps used during training.
@@ -81,11 +76,6 @@ python preprocessing/process_ct_intensity.py \
   --label_dir ./label \
   --output_dir ./data/train/label
 ```
-
-
-
-
-
 ---
 
 ## Training
@@ -125,22 +115,13 @@ results/
 ```bash
 python train_test_ddpm.py \
   --load_model \
-  --checkpoint_path path/to/checkpoint.pth.tar \
+  --checkpoint_path path/to/checkpoint \
   --image_dir  ./data/test/image \
   --label_dir  ./data/test/label \
   --organ_dir  ./data/test/organ \
   --output_dir ./results \
   --device     cuda
 ```
-
-<!-- Outputs are saved to:
-```
-results/
-├── generated/    # Model predictions
-├── image/        # Input CT images
-├── label/        # Conditioning labels
-└── noise/        # Predicted noise maps
-``` -->
 
 ### Sequential volume reconstruction
 
@@ -149,35 +130,13 @@ For slice-by-slice volumetric generation (each slice conditioned on the previous
 ```bash
 python train_test_ddpm.py \
   --load_model \
-  --checkpoint_path path/to/checkpoint.pth.tar \
+  --checkpoint_path path/to/checkpoint \
   --image_dir  ./data/test/image \
   --label_dir  ./data/test/label \
   --organ_dir  ./data/test/organ \
   --output_dir ./results \
   --device     cuda
 ```
-
-To resume sequential generation from a specific case:
-
-```bash
-python train_test_ddpm.py \
-  ... \
-  --resume_from s0001_214
-```
-
----
-
-## Model Architecture
-
-The model is a U-Net with Transformer blocks trained as a denoising diffusion probabilistic model (DDPM).
-
-- **Input:** 3-channel concatenation of `[noisy_residual, previous_slice, organ_mask]`
-- **Backbone:** U-Net encoder–decoder with skip connections
-- **Attention:** Local Self-Attention (LSA) at each scale — multi-head attention with learnable temperature and masked self-interaction
-- **Timestep conditioning:** Sinusoidal positional encoding injected at every block
-- **Output:** Predicted noise on the residual image
-- **Noise schedule:** Cosine annealing, 1000 steps
-- **Loss:** MSE + L1 on predicted noise
 
 ---
 
@@ -191,9 +150,3 @@ The model is a U-Net with Transformer blocks trained as a denoising diffusion pr
   year      = {2026}
 }
 ```
-
----
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
