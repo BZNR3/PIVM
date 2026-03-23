@@ -59,18 +59,9 @@ All preprocessing scripts are located in [`preprocessing/`](preprocessing/). Run
 ```bash
 python preprocessing/ts_process.py
 ```
-
-> Edit `dataset_path` inside the script to point to your `Totalsegmentator_dataset_v201/` directory.
-
-Output: `mask.nii` saved inside each subject folder.
-
 ### Step 2 — Convert NIfTI volumes to 2D PNG slices
 
-[`preprocessing/vol2imglabel.py`](preprocessing/vol2imglabel.py) converts each subject's CT volume and merged mask into 2D PNG slices:
-- Clips CT to **[-200, 500] HU**, normalizes to [0, 255]
-- Pads to square, resizes to **256×256**
-- Skips slices where the mask is empty
-- Saves CT slices → `./image/` and mask slices → `./label/`
+[`preprocessing/vol2imglabel.py`](preprocessing/vol2imglabel.py) converts each subject's CT volume and merged mask into 2D PNG slices.
 
 ```bash
 python preprocessing/vol2imglabel.py
@@ -91,36 +82,9 @@ python preprocessing/process_ct_intensity.py \
   --output_dir ./data/train/label
 ```
 
-<!-- | Argument | Default | Description |
-|---|---|---|
-| `--ct_dir` | `./data/images` | Directory of CT slice PNGs (from Step 3) |
-| `--label_dir` | `./data/labels` | Directory of organ mask PNGs (from Step 3) |
-| `--output_dir` | `./data/output` | Where to save intensity label maps | -->
 
-<!-- ### Final directory structure
 
-After all preprocessing steps, organize files as:
 
-```
-data/
-├── train/
-│   ├── image/       # CT slices (Step 3)
-│   ├── label/       # Intensity label maps (Step 4)
-│   └── organ/       # Organ mask slices (Step 3)
-└── test/
-    ├── image/
-    ├── label/
-    └── organ/
-``` -->
-
-<!-- Files follow the naming convention: `{subject}_{slice_number}.png`
-
-```
-s0001_214_1.png   ← subject s0001, volume 214, slice 1
-s0001_214_2.png   ← subject s0001, volume 214, slice 2
-```
-
-> Note: `_1.png` slices are used as reference and are excluded from training. -->
 
 ---
 
@@ -134,22 +98,12 @@ python train_test_ddpm.py \
   --device     cuda
 ```
 
-<!-- Key training hyperparameters (can be passed as arguments):
-
-| Argument | Default | Description |
-|---|---|---|
-| `--lr` | `2e-5` | Learning rate (AdamW) |
-| `--batch_size` | `1` | Batch size |
-| `--emb_dim` | `256` | Timestep embedding dimension |
-| `--image_size` | `256` | Input image resolution |
-| `--num_workers` | `4` | DataLoader workers | -->
-
 To resume from a checkpoint:
 
 ```bash
 python train_test_ddpm.py \
   --load_model \
-  --checkpoint_path ./results/checkpoints/\
+  --checkpoint_path path/to/checkpoint.pth.tar \
   --image_dir ./data/train/image \
   --label_dir ./data/train/label \
   --organ_dir ./data/train/organ
@@ -171,7 +125,7 @@ results/
 ```bash
 python train_test_ddpm.py \
   --load_model \
-  --checkpoint_path ./results/checkpoints/ddpm27.pth.tar \
+  --checkpoint_path path/to/checkpoint.pth.tar \
   --image_dir  ./data/test/image \
   --label_dir  ./data/test/label \
   --organ_dir  ./data/test/organ \
@@ -195,7 +149,7 @@ For slice-by-slice volumetric generation (each slice conditioned on the previous
 ```bash
 python train_test_ddpm.py \
   --load_model \
-  --checkpoint_path ./results/checkpoints/ddpm27.pth.tar \
+  --checkpoint_path path/to/checkpoint.pth.tar \
   --image_dir  ./data/test/image \
   --label_dir  ./data/test/label \
   --organ_dir  ./data/test/organ \
