@@ -1,8 +1,9 @@
-# PIVM: [Paper Title Here]
+# PIVM: Diffusion-Based Prior-Integrated Variation Modeling for Anatomically Precise Abdominal CT Synthesis
 
-> **[Paper Title]**
-> [Author 1], [Author 2], [Author 3]
-> *[Conference/Journal, Year]*
+> **PIVM: Diffusion-Based Prior-Integrated Variation Modeling for Anatomically Precise Abdominal CT Synthesis**
+> Dinglun He\*, Baoming Zhang\*, Xu Wang\*, Yao Hao, Deshan Yang, Ye Duan
+> (\* Equal contribution)
+> *IEEE International Symposium on Biomedical Imaging (ISBI), 2026*
 > [[Paper]](#) | [[Data]](#) <!-- Add links when available -->
 
 ---
@@ -193,11 +194,11 @@ The model is a U-Net with Transformer blocks trained as a denoising diffusion pr
 ## Citation
 
 ```bibtex
-@article{pivm2024,
-  title   = {[Paper Title]},
-  author  = {[Authors]},
-  journal = {[Journal/Conference]},
-  year    = {[Year]}
+@article{pivm,
+  title   = {PIVM: Diffusion-Based Prior-Integrated Variation Modeling for Anatomically Precise Abdominal CT Synthesis},
+  author  = {He, Dinglun and Zhang, Baoming and Wang, Xu and Hao, Yao and Yang, Deshan and Duan, Ye},
+  booktitle = {IEEE International Symposium on Biomedical Imaging (ISBI)},
+  year      = {2026}
 }
 ```
 
@@ -205,4 +206,4 @@ The model is a U-Net with Transformer blocks trained as a denoising diffusion pr
 
 ## License
 
-[License here]
+This project is licensed under the [MIT License](LICENSE).
