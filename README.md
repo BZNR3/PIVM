@@ -81,24 +81,13 @@ python preprocessing/process_ct_intensity.py \
 
 ## Training
 
-```bash
-python train_test_ddpm.py \
-  --image_dir  ./data/train/image \
-  --label_dir  ./data/train/label \
-  --organ_dir  ./data/train/organ \
-  --device     cuda
-```
-
-To resume from a checkpoint:
+Set `training = True` at the top of `train_test_ddpm.py`, configure the paths inside the script, then run:
 
 ```bash
-python train_test_ddpm.py \
-  --load_model \
-  --checkpoint_path path/to/checkpoint.pth.tar \
-  --image_dir ./data/train/image \
-  --label_dir ./data/train/label \
-  --organ_dir ./data/train/organ
+python train_test_ddpm.py
 ```
+
+To resume from a checkpoint, set `load_model = True` and point `checkpoint_path` to your saved checkpoint.
 
 **Training outputs** are saved to:
 ```
@@ -111,32 +100,18 @@ results/
 
 ## Testing
 
-### Paired inference (single slices)
+Set `training = False` at the top of `train_test_ddpm.py`, configure the paths inside the script, then run:
 
 ```bash
-python train_test_ddpm.py \
-  --load_model \
-  --checkpoint_path path/to/checkpoint \
-  --image_dir  ./data/test/image \
-  --label_dir  ./data/test/label \
-  --organ_dir  ./data/test/organ \
-  --output_dir ./results \
-  --device     cuda
+python train_test_ddpm.py
 ```
 
-### Sequential volume reconstruction
+This runs **sequential volume reconstruction** — slices are generated one by one, each conditioned on the previous generated slice. Results are saved to `results/`.
 
-For slice-by-slice volumetric generation (each slice conditioned on the previous):
+To resume from a specific case:
 
-```bash
-python train_test_ddpm.py \
-  --load_model \
-  --checkpoint_path path/to/checkpoint \
-  --image_dir  ./data/test/image \
-  --label_dir  ./data/test/label \
-  --organ_dir  ./data/test/organ \
-  --output_dir ./results \
-  --device     cuda
+```python
+test_args.resume_from = "s0001_214"  # set inside the script
 ```
 
 ---
