@@ -81,7 +81,7 @@ python preprocessing/process_ct_intensity.py \
 
 ## Training
 
-Set `training = True` at the top of `train_test_ddpm.py`, configure the paths inside the script, then run:
+Set `training = True`, configure the paths inside the script, then run:
 
 ```bash
 python train_test_ddpm.py
@@ -100,7 +100,7 @@ results/
 
 ## Testing
 
-Set `training = False` at the top of `train_test_ddpm.py`, configure the paths inside the script, then run:
+Set `training = False`, configure the paths inside the script, then run:
 
 ```bash
 python train_test_ddpm.py
@@ -122,7 +122,8 @@ test_args.resume_from = "s0001_214"  # set inside the script
 @article{pivm,
   title   = {PIVM: Diffusion-Based Prior-Integrated Variation Modeling for Anatomically Precise Abdominal CT Synthesis},
   author  = {He, Dinglun and Zhang, Baoming and Wang, Xu and Hao, Yao and Yang, Deshan and Duan, Ye},
-  booktitle = {IEEE International Symposium on Biomedical Imaging (ISBI)},
-  year      = {2026}
+  booktitle = {2026 IEEE 22nd International Symposium on Biomedical Imaging (ISBI)},
+  year      = {2026},
+  organization={IEEE}
 }
 ```
