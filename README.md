@@ -52,19 +52,7 @@ Totalsegmentator_dataset/
 
 All preprocessing scripts are located in [`preprocessing/`](preprocessing/). Run them **in order**.
 
-### Step 1 — Organ segmentation with TotalSegmentator
-
-Generate per-organ segmentation masks from raw CT volumes using [TotalSegmentator](https://github.com/wasserth/totalsegmentator):
-
-```bash
-pip install totalsegmentator
-
-# Run for each subject
-TotalSegmentator -i Totalsegmentator_dataset/s0001/ct.nii.gz \
-                 -o Totalsegmentator_dataset/s0001/segmentations/
-```
-
-### Step 2 — Merge organ segmentations into a single mask
+### Step 1 — Merge organ segmentations into a single mask
 
 [`preprocessing/ts_process.py`](preprocessing/ts_process.py) combines individual per-organ NIfTI files into a single multi-label `mask.nii` per subject. The 14 abdominal organs (liver, spleen, kidneys, pancreas, stomach, lungs, gallbladder, adrenal glands) are each assigned a unique integer label (1–14).
 
@@ -76,7 +64,7 @@ python preprocessing/ts_process.py
 
 Output: `mask.nii` saved inside each subject folder.
 
-### Step 3 — Convert NIfTI volumes to 2D PNG slices
+### Step 2 — Convert NIfTI volumes to 2D PNG slices
 
 [`preprocessing/vol2imglabel.py`](preprocessing/vol2imglabel.py) converts each subject's CT volume and merged mask into 2D PNG slices:
 - Clips CT to **[-200, 500] HU**, normalizes to [0, 255]
@@ -92,7 +80,7 @@ python preprocessing/vol2imglabel.py
 
 Output: `{subject}_{slice}.png` files in `./image/` and `./label/`.
 
-### Step 4 — Generate intensity-based conditioning labels
+### Step 3 — Generate intensity-based conditioning labels
 
 [`preprocessing/process_ct_intensity.py`](preprocessing/process_ct_intensity.py) replaces each organ region in the mask with its **global mean CT intensity** across the full dataset, producing the conditioning label maps used during training.
 
@@ -103,13 +91,13 @@ python preprocessing/process_ct_intensity.py \
   --output_dir ./data/train/label
 ```
 
-| Argument | Default | Description |
+<!-- | Argument | Default | Description |
 |---|---|---|
 | `--ct_dir` | `./data/images` | Directory of CT slice PNGs (from Step 3) |
 | `--label_dir` | `./data/labels` | Directory of organ mask PNGs (from Step 3) |
-| `--output_dir` | `./data/output` | Where to save intensity label maps |
+| `--output_dir` | `./data/output` | Where to save intensity label maps | -->
 
-### Final directory structure
+<!-- ### Final directory structure
 
 After all preprocessing steps, organize files as:
 
@@ -123,16 +111,16 @@ data/
     ├── image/
     ├── label/
     └── organ/
-```
+``` -->
 
-Files follow the naming convention: `{subject}_{slice_number}.png`
+<!-- Files follow the naming convention: `{subject}_{slice_number}.png`
 
 ```
 s0001_214_1.png   ← subject s0001, volume 214, slice 1
 s0001_214_2.png   ← subject s0001, volume 214, slice 2
 ```
 
-> Note: `_1.png` slices are used as reference and are excluded from training.
+> Note: `_1.png` slices are used as reference and are excluded from training. -->
 
 ---
 
@@ -146,7 +134,7 @@ python train_test_ddpm.py \
   --device     cuda
 ```
 
-Key training hyperparameters (can be passed as arguments):
+<!-- Key training hyperparameters (can be passed as arguments):
 
 | Argument | Default | Description |
 |---|---|---|
@@ -154,14 +142,14 @@ Key training hyperparameters (can be passed as arguments):
 | `--batch_size` | `1` | Batch size |
 | `--emb_dim` | `256` | Timestep embedding dimension |
 | `--image_size` | `256` | Input image resolution |
-| `--num_workers` | `4` | DataLoader workers |
+| `--num_workers` | `4` | DataLoader workers | -->
 
 To resume from a checkpoint:
 
 ```bash
 python train_test_ddpm.py \
   --load_model \
-  --checkpoint_path ./results/checkpoints/ddpm27.pth.tar \
+  --checkpoint_path ./results/checkpoints/\
   --image_dir ./data/train/image \
   --label_dir ./data/train/label \
   --organ_dir ./data/train/organ
@@ -191,14 +179,14 @@ python train_test_ddpm.py \
   --device     cuda
 ```
 
-Outputs are saved to:
+<!-- Outputs are saved to:
 ```
 results/
 ├── generated/    # Model predictions
 ├── image/        # Input CT images
 ├── label/        # Conditioning labels
 └── noise/        # Predicted noise maps
-```
+``` -->
 
 ### Sequential volume reconstruction
 
@@ -236,12 +224,6 @@ The model is a U-Net with Transformer blocks trained as a denoising diffusion pr
 - **Output:** Predicted noise on the residual image
 - **Noise schedule:** Cosine annealing, 1000 steps
 - **Loss:** MSE + L1 on predicted noise
-
----
-
-## Acknowledgements
-
-Organ segmentation masks are generated using [TotalSegmentator](https://github.com/wasserth/totalsegmentator). We thank the authors for making their tool publicly available.
 
 ---
 
