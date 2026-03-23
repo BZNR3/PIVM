@@ -4,7 +4,7 @@
 > Dinglun He\*, Baoming Zhang\*, Xu Wang\*, Yao Hao, Deshan Yang, Ye Duan
 > (\* Equal contribution)
 > *IEEE International Symposium on Biomedical Imaging (ISBI), 2026*
-> [[Paper]](#) | [[Data]](#) <!-- Add links when available -->
+> [[Paper]](#) | [[Data](https://zenodo.org/records/10047292)]
 
 ---
 
@@ -31,7 +31,14 @@ Tested with Python 3.8+, PyTorch 2.0+, CUDA 11.8+.
 
 ## Data
 
-> **Download link:** _coming soon_ <!-- Replace with actual link -->
+> **Download:** [https://zenodo.org/records/10047292](https://zenodo.org/records/10047292)
+
+Organ segmentation masks are generated using [TotalSegmentator](https://github.com/wasserth/totalsegmentator):
+
+```bash
+pip install totalsegmentator
+TotalSegmentator -i ct.nii.gz -o segmentations/
+```
 
 ### Directory Structure
 
@@ -188,6 +195,12 @@ The model is a U-Net with Transformer blocks trained as a denoising diffusion pr
 - **Output:** Predicted noise on the residual image
 - **Noise schedule:** Cosine annealing, 1000 steps
 - **Loss:** MSE + L1 on predicted noise
+
+---
+
+## Acknowledgements
+
+Organ segmentation masks are generated using [TotalSegmentator](https://github.com/wasserth/totalsegmentator). We thank the authors for making their tool publicly available.
 
 ---
 
