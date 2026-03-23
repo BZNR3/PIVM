@@ -89,7 +89,7 @@ python train_test_ddpm.py
 
 To resume from a checkpoint, set `load_model = True` and point `checkpoint_path` to your saved checkpoint.
 
-**Training outputs** are saved to:
+Training outputs are saved to:
 ```
 results/
 ├── checkpoints/       # Model checkpoints (saved when loss improves)
@@ -108,22 +108,15 @@ python train_test_ddpm.py
 
 This runs **sequential volume reconstruction** — slices are generated one by one, each conditioned on the previous generated slice. Results are saved to `results/`.
 
-To resume from a specific case:
-
-```python
-test_args.resume_from = "s0001_214"  # set inside the script
-```
-
 ---
 
 ## Citation
 
 ```bibtex
 @article{pivm,
-  title   = {PIVM: Diffusion-Based Prior-Integrated Variation Modeling for Anatomically Precise Abdominal CT Synthesis},
-  author  = {He, Dinglun and Zhang, Baoming and Wang, Xu and Hao, Yao and Yang, Deshan and Duan, Ye},
-  booktitle = {2026 IEEE 22nd International Symposium on Biomedical Imaging (ISBI)},
-  year      = {2026},
-  organization={IEEE}
+  title={PIVM: Diffusion-Based Prior-Integrated Variation Modeling for Anatomically Precise Abdominal CT Synthesis},
+  author={He, Dinglun and Zhang, Baoming and Wang, Xu and Hao, Yao and Yang, Deshan and Duan, Ye},
+  booktitle={International Symposium on Biomedical Imaging (ISBI)},
+  year={2026}
 }
 ```
